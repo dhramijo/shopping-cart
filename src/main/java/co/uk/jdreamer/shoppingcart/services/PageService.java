@@ -16,4 +16,12 @@ public class PageService {
     public List<Page> findAllPages() {
         return pageRepository.findAll();
     }
+
+    public Page findBySlug(String slug) {
+        return pageRepository.findBySlug(slug);
+    }
+
+    public void savePage(Page page) {
+        pageRepository.save(page);
+    }
 }
