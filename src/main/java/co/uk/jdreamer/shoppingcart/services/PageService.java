@@ -13,15 +13,27 @@ public class PageService {
     @Autowired
     PageRepository pageRepository;
 
-    public List<Page> findAllPages() {
-        return pageRepository.findAll();
+    public List<Page> findAllByOrderBySortingAsc() {
+        return pageRepository.findAllByOrderBySortingAsc();
     }
 
     public Page findBySlug(String slug) {
         return pageRepository.findBySlug(slug);
     }
 
+    public Page findBySlugAndIdNot(String slug, int id) {
+        return pageRepository.findBySlugAndIdNot(slug, id);
+    }
+
     public void savePage(Page page) {
         pageRepository.save(page);
+    }
+
+    public Page findPageById(int id) {
+        return pageRepository.getOne(id);
+    }
+
+    public void deleteById(int id) {
+        pageRepository.deleteById(id);
     }
 }

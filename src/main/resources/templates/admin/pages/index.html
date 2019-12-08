@@ -9,20 +9,24 @@
 
     <h1 class="display-2">Pages</h1>
     <a href="/admin/pages/add" class="btn btn-primary mb-5">Add new page</a>
+    <!-- message value is passed from the Controller -->
+    <!--/*@thymesVar id="message" type=""*/-->
+    <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
 
     <div th:if="${!pages.isEmpty()}">
-        <table class="table">
-            <tr>
+        <table class="table sorting" id="pages">
+            <tr class="home">
                 <th>Title</th>
                 <th>Slug</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
-            <tr th:each="page: ${pages}">
+            <tr th:each="page: ${pages}" th:id="'id_' + ${page.id}" th:class="${page.slug}">
                 <td th:text="${page.title}"></td>
                 <td th:text="${page.title}"></td>
                 <td><a th:href="@{'/admin/pages/edit/' + ${page.id}}">Edit</a></td>
-                <td><a th:href="@{'/admin/pages/delete/' + ${page.id}}">Delete</a></td>
+                <td><a th:if="${page.slug != 'home'}" th:href="@{'/admin/pages/delete/' + ${page.id}}"
+                       class="confirmDeletion">Delete</a></td>
             </tr>
         </table>
     </div>
@@ -34,6 +38,21 @@
 </div>
 
 <footer th:replace="/fragments/footer"></footer>
+
+<script>
+
+    $("table#pages tbody").sortable({
+        items: "tr:not(.home)",
+        placeholder: "ui-state-highlight",
+        update: function () {
+            let ids = $("table#pages tbody").sortable("serialize");
+            let url = "/admin/pages/reorder";
+            $.post(url, ids, function (data) {
+                console.log(data);
+            });
+        }
+    });
+</script>
 
 </body>
 </html>
