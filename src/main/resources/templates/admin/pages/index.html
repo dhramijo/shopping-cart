@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/head"></head>
+<body>
+
+<nav th:replace="/fragments/nav :: nav-admin "></nav>
+
+<div class="container">
+
+    <h1 class="display-2">Pages</h1>
+    <a href="/admin/pages/add" class="btn btn-primary mb-5">Add new page</a>
+
+    <div th:if="${!pages.isEmpty()}">
+        <table class="table">
+            <tr>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            <tr th:each="page: ${pages}">
+                <td th:text="${page.title}"></td>
+                <td th:text="${page.title}"></td>
+                <td><a th:href="@{'/admin/pages/edit/' + ${page.id}}">Edit</a></td>
+                <td><a th:href="@{'/admin/pages/delete/' + ${page.id}}">Delete</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:unless="${!pages.isEmpty()}">
+        <h4 class="display-4">There are no pages at the moment</h4>
+    </div>
+
+</div>
+
+<footer th:replace="/fragments/footer"></footer>
+
+</body>
+</html>
