@@ -1,7 +1,7 @@
 package co.uk.jdreamer.shoppingcart.controllers;
 
 import co.uk.jdreamer.shoppingcart.models.Page;
-import co.uk.jdreamer.shoppingcart.services.PageService;
+import co.uk.jdreamer.shoppingcart.repositories.PageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +17,12 @@ import java.util.List;
 public class AdminPagesController {
 
     @Autowired
-    PageService pageService;
+    PageRepository pageRepository;
 
     @GetMapping
     public String index(Model model) {
 
-        List<Page> pages = pageService.findAllByOrderBySortingAsc();
+        List<Page> pages = pageRepository.findAllByOrderBySortingAsc();
         // Pass the list of pages to index view
         model.addAttribute("pages", pages);
 
@@ -34,7 +34,6 @@ public class AdminPagesController {
      * ADD NEW PAGES
      *
      * */
-
     @GetMapping("/add")
     public String add(@ModelAttribute Page page) {
         return "admin/pages/add";
@@ -51,7 +50,7 @@ public class AdminPagesController {
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 
         String slug = page.getSlug() == "" ? page.getTitle().toLowerCase().replace(" ", "-") : page.getSlug().toLowerCase().replace(" ", "-");
-        Page slugExists = pageService.findBySlug(slug);
+        Page slugExists = pageRepository.findBySlug(slug);
 
         if (slugExists != null) {
             redirectAttributes.addFlashAttribute("message", "Slug exists, choose another");
@@ -61,7 +60,7 @@ public class AdminPagesController {
             page.setSlug(slug);
             page.setSorting(100); // set as the last page
 
-            pageService.savePage(page);
+            pageRepository.save(page);
         }
         return "redirect:/admin/pages/add";
     }
@@ -71,11 +70,10 @@ public class AdminPagesController {
      * EDIT PAGES
      *
      * */
-
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable int id, Model model) {
 
-        Page page = pageService.findPageById(id);
+        Page page = pageRepository.getOne(id);
 
         model.addAttribute("page", page);
 
@@ -86,7 +84,7 @@ public class AdminPagesController {
     @PostMapping("/edit")
     public String edit(@Valid Page page, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
-        Page currentPage = pageService.findPageById(page.getId());
+        Page currentPage = pageRepository.getOne(page.getId());
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("pageTitle", currentPage.getTitle());
@@ -97,7 +95,7 @@ public class AdminPagesController {
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 
         String slug = page.getSlug() == "" ? page.getTitle().toLowerCase().replace(" ", "-") : page.getSlug().toLowerCase().replace(" ", "-");
-        Page slugExists = pageService.findBySlugAndIdNot(slug, page.getId());
+        Page slugExists = pageRepository.findBySlugAndIdNot(slug, page.getId());
 
         if (slugExists != null) {
             redirectAttributes.addFlashAttribute("message", "Slug exists, choose another");
@@ -106,7 +104,7 @@ public class AdminPagesController {
         } else {
             page.setSlug(slug);
 
-            pageService.savePage(page);
+            pageRepository.save(page);
         }
         return "redirect:/admin/pages/edit/" + page.getId();
     }
@@ -116,11 +114,10 @@ public class AdminPagesController {
      * DELETE PAGES
      *
      * */
-
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable int id, RedirectAttributes redirectAttributes) {
 
-        pageService.deleteById(id);
+        pageRepository.deleteById(id);
 
         redirectAttributes.addFlashAttribute("message", "Page deleted");
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
@@ -129,6 +126,11 @@ public class AdminPagesController {
 
     }
 
+    /***
+     * Page Reordering
+     * @param id
+     * @return
+     */
     @PostMapping("/reorder")
     public @ResponseBody
     String reorder(@RequestParam("id[]") int[] id) {
@@ -137,9 +139,9 @@ public class AdminPagesController {
         Page page;
 
         for (int pageId : id) {
-            page = pageService.findPageById(pageId);
+            page = pageRepository.getOne(pageId);
             page.setSorting(count);
-            pageService.savePage(page);
+            pageRepository.save(page);
             count++;
         }
 

@@ -1,0 +1,4 @@
+FROM openjdk:8
+ADD target/shopping-cart.jar shopping-cart.jar
+EXPOSE 8880
+ENTRYPOINT ["java", "-jar", "shopping-cart.jar"]

@@ -11,8 +11,8 @@
 	<groupId>co.uk.jdreamer</groupId>
 	<artifactId>shopping-cart</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>shopping-cart</name>
+	<description>Cms shopping cart project with Spring Boot</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -68,6 +68,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>shopping-cart</finalName>
 	</build>
 
 </project>
