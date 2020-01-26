@@ -38,12 +38,12 @@
 
 <script>
 
-    $("table#pages tbody").sortable({
+    $("table#categories tbody").sortable({
         items: "tr:not(.home)",
         placeholder: "ui-state-highlight",
         update: function () {
-            let ids = $("table#pages tbody").sortable("serialize");
-            let url = "/admin/pages/reorder";
+            let ids = $("table#categories tbody").sortable("serialize");
+            let url = "/admin/categories/reorder";
             $.post(url, ids, function (data) {
                 console.log(data);
             });
