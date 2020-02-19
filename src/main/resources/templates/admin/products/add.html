@@ -20,30 +20,32 @@
         </div>
 
         <div class="form-group">
-            <label for="">Name</label>
+            <label for="">Name:</label>
             <input type="text" class="form-control" th:field="*{name}" placeholder="Name">
             <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
         </div>
 
         <div class="form-group">
-            <label for="">Description</label>
-            <textarea rows="10" class="form-control" th:field="*{description}" placeholder="Description"></textarea>
+            <label for="">Description:</label>
+            <textarea th:field="*{description}" rows="10" class="form-control" placeholder="Description"></textarea>
             <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
         </div>
 
         <div class="form-group">
-            <input type="file" class="form-control" th:name="file">
+            <label for="">Image:</label>
+            <input type="file" class="form-control" th:name="file" th:id="file">
+            <img class="mt-2" src="#" alt="" id="imgPreview1">
         </div>
 
         <div class="form-group">
-            <label for="">Price</label>
+            <label for="">Price:</label>
             <input type="text" class="form-control" th:field="*{price}" placeholder="20 or 20.99">
             <span class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
         </div>
 
         <div class="form-group">
-            <label for="">Category</label>
-            <select th:field="${categoryId}" class="form-control">
+            <label for="">Category:</label>
+            <select th:field="*{categoryId}" class="form-control">
                 <option th:value="0">Choose a category</option>
                 <option th:each="cat: ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
             </select>
@@ -51,11 +53,20 @@
         </div>
 
         <button class="btn btn-danger mb-5">Add product</button>
+
     </form>
 
 </div>
 
 <footer th:replace="/fragments/footer"></footer>
+
+<script>
+    $(function () {
+        $("#file").change(function () {
+            readURL(this, '1');
+        });
+    });
+</script>
 
 </body>
 </html>
