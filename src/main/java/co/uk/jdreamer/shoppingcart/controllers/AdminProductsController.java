@@ -5,13 +5,13 @@ import co.uk.jdreamer.shoppingcart.models.Product;
 import co.uk.jdreamer.shoppingcart.repositories.CategoryRepository;
 import co.uk.jdreamer.shoppingcart.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -35,9 +35,18 @@ public class AdminProductsController {
     CategoryRepository categoryRepository;
 
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model, @RequestParam(value = "page", required = false) Integer pageNumber) {
 
-        List<Product> products = productRepository.findAll();
+        // Pagination
+        int page = (pageNumber != null) ? pageNumber : 0; // Default page number is 0
+        int sizePerPage = 4; // Number products per page
+        Long count = productRepository.count(); // Number of total product's row
+        double pageCount = Math.ceil((double) count / (double) sizePerPage); // Number of pages needed for the pagination
+
+        Pageable pageable = PageRequest.of(page, sizePerPage);
+        Page<Product> products = productRepository.findAll(pageable);
+        // End pagination
+
         List<Category> categories = categoryRepository.findAll();
 
         Map<Integer, String> mapCategories = new HashMap<Integer, String>();
@@ -48,6 +57,12 @@ public class AdminProductsController {
         // Pass the list of pages to index view
         model.addAttribute("products", products);
         model.addAttribute("mapCategories", mapCategories);
+
+        // Pass the pagination info to the view
+        model.addAttribute("page", page);
+        model.addAttribute("sizePerPage", sizePerPage);
+        model.addAttribute("count", count);
+        model.addAttribute("pageCount", (int) pageCount);
 
         return "admin/products/index";
     }
@@ -195,5 +210,22 @@ public class AdminProductsController {
 
         }
         return "redirect:/admin/products/edit/" + product.getId();
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable int id, RedirectAttributes redirectAttributes) throws IOException {
+
+        Product product = productRepository.getOne(id);
+        // Get the old image
+        Path path2 = Paths.get("src/main/resources/static/media/" + product.getImage());
+        // Delete the old image
+        Files.delete(path2);
+        productRepository.deleteById(id);
+
+        redirectAttributes.addFlashAttribute("message", "Product deleted");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+
+        return "redirect:/admin/products";
+
     }
 }
