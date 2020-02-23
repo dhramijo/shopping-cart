@@ -40,7 +40,7 @@ public class AdminProductsController {
         // Pagination
         int page = (pageNumber != null) ? pageNumber : 0; // Default page number is 0
         int sizePerPage = 4; // Number products per page
-        Long count = productRepository.count(); // Number of total product's row
+        long count = productRepository.count(); // Number of total product's row
         double pageCount = Math.ceil((double) count / (double) sizePerPage); // Number of pages needed for the pagination
 
         Pageable pageable = PageRequest.of(page, sizePerPage);

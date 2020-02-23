@@ -26,7 +26,7 @@ public class PagesController {
     }
 
     @GetMapping("/{slug}")
-    public String home(Model model, @PathVariable String slug) {
+    public String page(Model model, @PathVariable String slug) {
 
         Page page = pageRepository.findBySlug(slug);
 

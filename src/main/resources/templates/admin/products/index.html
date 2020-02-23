@@ -37,10 +37,10 @@
         </table>
     </div>
 
-    <nav class="mt-3 central" th:if="${count > sizePerPage}">
+    <nav class="mt-3" th:if="${count > sizePerPage}">
         <ul class="pagination">
             <li class="page-item" th:if="${page > 0}">
-                <a th:href="@{${#httpServletRequest.requestURI}} + '?page=__${page-1}__'" class="page-link"><<</a>
+                <a th:href="@{${#httpServletRequest.requestURI}} + '?page=__${page-1}__'" class="page-link">Previous</a>
             </li>
             <li class="page-item" th:each="number: ${#numbers.sequence(0, pageCount-1)}"
                 th:classappend="${page==number} ? 'active' : ''">
@@ -49,7 +49,7 @@
                    th:text="${number+1}"></a>
             </li>
             <li class="page-item" th:if="${page < pageCount-1}">
-                <a th:href="@{${#httpServletRequest.requestURI}} + '?page=__${page+1}__'" class="page-link">>></a>
+                <a th:href="@{${#httpServletRequest.requestURI}} + '?page=__${page+1}__'" class="page-link">Next</a>
             </li>
         </ul>
     </nav>
