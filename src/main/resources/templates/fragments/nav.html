@@ -1,4 +1,4 @@
-<nav th:fragment="nav-front" class="navbar navbar-expand-md navbar-dark bg-dark" xmlns:th="">
+<nav th:fragment="nav-front" class="navbar navbar-expand-md navbar-dark bg-dark" xmlns:th="http://www.thymeleaf.org">
     <a class="navbar-brand" href="/">CMS Shopping Cart</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -7,11 +7,10 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+            <!-- If slug == home than do not show it in the screen -->
+            <li class="nav-item active" th:each="page: ${commonPages}" th:if="${page.slug != 'home' }">
+                <a class="nav-link" th:href="@{'/' + ${page.slug}}"
+                   th:text="${page.title}"></a>
             </li>
         </ul>
     </div>
