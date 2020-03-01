@@ -1,5 +1,6 @@
-<div class="bg-dark text-white p-3 mt-3" th:fragment="cart_partial" xmlns="http://www.w3.org/1999/xhtml"
-     xmlns:th="http://www.thymeleaf.org">
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.thymeleaf.org"
+     class="bg-dark text-white p-3 mt-3" th:fragment="cart_partial" th:if="${notCartViewPage == null}">
     <div class="cart cartActive" th:if="${cartActive}">
         <p>You have <span th:text="${commonSize}"></span> items in your cart.</p>
         <p>Total <span th:text="'$' + ${#numbers.formatDecimal(commonTotal, 0, 'COMMA', 2, 'POINT')}"></span> items in

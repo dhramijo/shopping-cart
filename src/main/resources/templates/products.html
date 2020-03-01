@@ -23,8 +23,13 @@
                     <p th:text="'£' + ${product.price}"></p>
                     <div>
                         <p>
-                            <a href="#">Add to Cart</a>
+                            <a class="btn btn-primary addToCart"
+                               th:attr="data-id=${product.id}"
+                               th:href="@{'/cart/add/' + ${product.id}}">Add to Cart
+                            </a>
+                            <img class="ajaxLoader d-none" src="/images/ajax-loader.gif">
                         </p>
+                        <div class="btn btn-sm btn-success hide productAdded">Product Added!</div>
                     </div>
                 </div>
             </div>
@@ -54,5 +59,29 @@
 
 <footer th:replace="/fragments/footer"></footer>
 
+<script>
+
+    $("a.addToCart").click(function (e) {
+        e.preventDefault();
+
+        let $this = $(this);
+
+        $this.next().removeClass('d-none');
+
+        let id = $this.attr("data-id");
+        let url = "/cart/add/" + id;
+
+        $.get(url, {}, function (data) {
+            $('div.cart').html(data);
+        }).done(function () {
+            $this.parent().parent().find('div.productAdded').fadeIn();
+            $this.next().addClass('d-none');
+            setTimeout(() => {
+                $this.parent().parent().find('div.productAdded').fadeOut();
+            }, 1000);
+        });
+    });
+
+</script>
 </body>
 </html>
