@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +61,52 @@ public class CartController {
         }
 
         return "cart_view";
+    }
+
+    @GetMapping("/subtract/{id}")
+    public String subtract(@PathVariable int id, Model model, HttpSession session, HttpServletRequest httpServletRequest) {
+
+        Product product = productRepository.getOne(id);
+        Map<Integer, Cart> cart = (Map<Integer, Cart>) session.getAttribute("cart");
+
+        int quantity = cart.get(id).getQuantity();
+        if (quantity == 1) {
+            cart.remove(id);
+            if (cart.size() == 0) {
+                session.removeAttribute("cart");
+            }
+        } else {
+            cart.put(id, new Cart(id, product.getName(), product.getPrice(), --quantity, product.getImage()));
+        }
+
+        String referLink = httpServletRequest.getHeader("referer");
+
+        return "redirect:" + referLink;
+    }
+
+    @GetMapping("/remove/{id}")
+    public String remove(@PathVariable int id, Model model, HttpSession session, HttpServletRequest httpServletRequest) {
+
+        Map<Integer, Cart> cart = (Map<Integer, Cart>) session.getAttribute("cart");
+
+        cart.remove(id);
+        if (cart.size() == 0) {
+            session.removeAttribute("cart");
+        }
+
+        String referLink = httpServletRequest.getHeader("referer");
+
+        return "redirect:" + referLink;
+    }
+
+    @GetMapping("/clear")
+    public String clear(HttpSession session, HttpServletRequest httpServletRequest) {
+
+        session.removeAttribute("cart");
+
+        String referLink = httpServletRequest.getHeader("referer");
+
+        return "redirect:" + referLink;
     }
 
     @RequestMapping("/view")

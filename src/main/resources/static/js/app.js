@@ -1,9 +1,10 @@
 $(function () {
+
     $("a.confirmDeletion").click(function () {
         if (!confirm("Confirm deletion")) return false;
     });
 
-    if ($("#content").length) {
+    if ( $("#content").length) {
         ClassicEditor
             .create(document.querySelector("#content"))
             .catch(error => {
@@ -11,7 +12,7 @@ $(function () {
             });
     }
 
-    if ($("#description").length) {
+    if ( $("#description").length) {
         ClassicEditor
             .create(document.querySelector("#description"))
             .catch(error => {
@@ -19,12 +20,10 @@ $(function () {
             });
     }
 
-
 });
 
 function readURL(input, idNum) {
     if (input.files && input.files[0]) {
-
         let reader = new FileReader();
 
         reader.onload = function (e) {
