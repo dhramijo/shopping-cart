@@ -1,4 +1,4 @@
-package co.uk.jdreamer.shoppingcart.controllers;
+package co.uk.jdreamer.shoppingcart.controllers.admin;
 
 import co.uk.jdreamer.shoppingcart.models.Category;
 import co.uk.jdreamer.shoppingcart.models.Product;

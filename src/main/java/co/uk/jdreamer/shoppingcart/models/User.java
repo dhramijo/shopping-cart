@@ -14,7 +14,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "users")
 @Data
-public class Users implements UserDetails {
+public class User implements UserDetails {
 
     private static final long serialVersionUID = 1l;
 
