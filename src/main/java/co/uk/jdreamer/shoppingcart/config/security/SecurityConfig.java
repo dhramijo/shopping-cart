@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
-    public PasswordEncoder getEncoder() {
+    public PasswordEncoder encode() {
         return new BCryptPasswordEncoder();
     }
 
