@@ -33,7 +33,7 @@ public class Common {
 
         List<Page> commonPages = pageRepository.findAllByOrderBySortingAsc();
 
-        List<Category> commonCategories = categoryRepository.findAll();
+        List<Category> commonCategories = categoryRepository.findAllByOrderBySortingAsc();
 
         boolean cartActive = false;
 
