@@ -1,4 +1,4 @@
-package co.uk.jdreamer.shoppingcart.controllers.security;
+package co.uk.jdreamer.shoppingcart.security;
 
 import co.uk.jdreamer.shoppingcart.models.User;
 import co.uk.jdreamer.shoppingcart.repositories.UserRepository;
